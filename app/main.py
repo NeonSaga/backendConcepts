@@ -1,8 +1,12 @@
 from fastapi import FastAPI
-from app.schemas.todo import Todo, TodoCreate, TodoUpdate
 from app.routes.todos import router
-from app.services.todo_service import todos, next_id
+from app.database import Base, engine
+from app.models.todo import Todo
+
+
 app = FastAPI()
+
+Base.metadata.create_all(bind=engine)
 
 app.include_router(router)
 

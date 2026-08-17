@@ -1,8 +1,6 @@
 from app.schemas.todo import Todo, TodoUpdate , TodoCreate
-
-
-
-
+from app.models.todo import Todo as TodoModel
+from sqlalchemy.orm import Session 
 
 
 todos = []
@@ -18,17 +16,17 @@ def get_todo(todo_id):
 
 
 
-def create_todo(todo):
+def create_todo(todo, db: Session):
     global next_id
 
-    new_todo = Todo(
-        id = next_id,
+    new_todo = TodoModel(
         title = todo.title,
         completed = todo.completed
     )
 
-    todos.append(new_todo)
-    next_id += 1
+    db.add(new_todo)
+    db.commit()
+    db.refresh(new_todo)
 
     return new_todo
 
